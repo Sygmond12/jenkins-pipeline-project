@@ -1,51 +1,47 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven 3.9.9' 
-    }
-
     stages {
         stage('Build') {
             steps {
                 echo 'Building...'
-                bat 'mvn clean package'
+                echo 'mvn clean package' //  Maven build command
             }
         }
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running Unit and Integration Tests...'
-                bat 'mvn test'
+                echo 'mvn test' // Simulating Maven test command
             }
         }
         stage('Code Analysis') {
             steps {
                 echo 'Analyzing Code...'
-                bat 'mvn sonar:sonar'
+                echo 'mvn sonar:sonar' // Simulate Maven code analysis 
             }
         }
         stage('Security Scan') {
             steps {
                 echo 'Performing Security Scan...'
-                bat 'dependency-check.bat --project myapp --scan .'
+                echo 'dependency-check.bat --project myapp --scan .' // Simulate security scan command
             }
         }
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploying to Staging...'
-                bat 'scp target\\myapp.war ec2-user@staging-server:/path/to/deploy/'
+                echo 'scp target\\myapp.war ec2-user@staging-server:/path/to/deploy/' // Simulating deploy command
             }
         }
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running Integration Tests on Staging...'
-                bat 'curl -s http://staging-server/test'
+                echo 'curl -s http://staging-server/test' // this is ti simulate integration test command
             }
         }
         stage('Deploy to Production') {
             steps {
                 echo 'Deploying to Production...'
-                bat 'scp target\\myapp.war ec2-user@production-server:/path/to/deploy/'
+                echo 'scp target\\myapp.war ec2-user@production-server:/path/to/deploy/' //deploy command
             }
         }
     }

@@ -48,16 +48,19 @@ pipeline {
 
     post {
         success {
-            mail to: 'dev-team@example.com',
+            emailext (
+                to: 'dev-team@example.com',
                 subject: "Pipeline Successful: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-                body: "Build was successful. Check Jenkins for details.",
-                attachLog: true
+                body: "Build was successful. Check Jenkins for details."
+            )
         }
         failure {
-            mail to: 'dev-team@example.com',
+            emailext (
+                to: 'dev-team@example.com',
                 subject: "Pipeline Failed: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-                body: "Build failed. Check Jenkins for details.",
-                attachLog: true
+                body: "Build failed. Check Jenkins for details."
+            )
         }
     }
 }
+

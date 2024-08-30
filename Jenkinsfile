@@ -11,7 +11,7 @@ pipeline {
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running Unit and Integration Tests...'
-                echo 'mvn test' // Simulating Maven test command
+                echo 'mvn test' // Simulating what the Maven test command would be
             }
             post {
                 always {
@@ -19,7 +19,7 @@ pipeline {
                         to: 'sygmonddhital@gmail.com',
                         subject: "Unit and Integration Tests: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
                         body: "Unit and Integration Tests stage completed.\n\nCheck Jenkins for details.",
-                        attachmentsPattern: '**/test-results.xml'
+                        attachLog: true 
                     )
                 }
             }
@@ -33,7 +33,7 @@ pipeline {
         stage('Security Scan') {
             steps {
                 echo 'Performing Security Scan...'
-                echo 'dependency-check.bat --project myapp --scan .' // Simulate security scan command
+                echo 'Checking this application for security issues.' // Simulate security scan command
             }
             post {
                 always {
@@ -41,7 +41,7 @@ pipeline {
                         to: 'sygmonddhital@gmail.com',
                         subject: "Security Scan: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
                         body: "Security Scan stage completed.\n\nCheck Jenkins for details.",
-                        attachmentsPattern: '**/dependency-check-report.xml'
+                         attachLog: true //this will send out the log
                     )
                 }
             }
@@ -49,19 +49,19 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploying to Staging...'
-                echo 'scp target\\myapp.war ec2-user@staging-server:/path/to/deploy/' // Simulating deploy command
+                echo 'copying to a staging enviroment, for deployment' // Simulating deploy command
             }
         }
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running Integration Tests on Staging...'
-                echo 'curl -s http://staging-server/test' // Simulating integration test command
+                echo 'Now testing application on a staging server' // Simulating integration test command
             }
         }
         stage('Deploy to Production') {
             steps {
                 echo 'Deploying to Production...'
-                echo 'scp target\\myapp.war ec2-user@production-server:/path/to/deploy/' // Deploy command
+                echo 'moving files to ec2-user@production-server:/path/to/deploy/' // Deploy command production server in Amazon
             }
         }
     }
@@ -70,15 +70,17 @@ pipeline {
         success {
             emailext (
                 to: 'sygmonddhital@gmail.com',
-                subject: "Pipeline Successful: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-                body: "Pipeline build was successful.\n\nCheck Jenkins for details."
+                subject: "Pipeline Was Successful: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
+                body: "Pipeline build was successful.\n\nCheck Jenkins for details.",
+                attachLog: true 
             )
         }
         failure {
             emailext (
                 to: 'sygmonddhital@gmail.com',
-                subject: "Pipeline Failed: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-                body: "Pipeline build failed.\n\nCheck Jenkins for details."
+                subject: "Unfortunately Pipeline Has Failed: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
+                body: "Pipeline build failed.\n\nCheck Jenkins for details.",
+                attachLog: true 
             )
         }
     }
